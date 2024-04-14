@@ -24,9 +24,9 @@ class ProcessService {
 
   Future<void> start() async {
     ++executionIndex;
-    stop();
-    while (process != null) {
-      await Future.delayed(config.timeout!);
+    if (process != null) {
+      stop();
+      return;
     }
     process = await Process.start(
       config.cmd!,
@@ -40,17 +40,21 @@ class ProcessService {
       print(data);
     });
     process!.exitCode.then((code) {
-      if (isRunning) {
-        print('Process exited with code $code');
-        print("Press any key to restart...");
-      }
       process = null;
+      if (isRunning) {
+        // Process stopped on its own
+        print('Process exited with code $code');
+        print("Press enter to restart...");
+      } else {
+        // Process stopped due to a restart
+        start();
+      }
     });
   }
 
   void stop() {
-    process?.kill();
     isRunning = false;
+    process?.kill();
   }
 
   void restart(Duration timeout) async {
@@ -63,9 +67,9 @@ class ProcessService {
 
   void onStdinEvent(data) {
     if (!isRunning || process == null) {
-      restart(Duration(seconds: 0));
+      start();
       return;
     }
-    process!.stdin.writeln(data);
+    process?.stdin.writeln(data);
   }
 }
