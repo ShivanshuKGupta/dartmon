@@ -94,7 +94,7 @@ void main() {
     config = DartmonConfig();
     config.construct([]);
     expect(config.timeout != null, true);
-    expect(config.timeout!.inMilliseconds, 20);
+    expect(config.timeout!.inMilliseconds, 1000);
   });
 
   test("recursive", () {

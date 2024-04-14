@@ -128,8 +128,8 @@ class DartmonConfig {
         } else if (value.startsWith("'") && value.endsWith("'")) {
           value = value.substring(1, value.length - 1);
         }
-        value = value.replaceAll(RegExp(r'\s{2,}'), ' ');
         value = value.trim();
+        value = value.replaceAll(RegExp(r'\s{2,}'), ' ');
       }
       bool handled = false;
       handled = handled || helpHandler(option, value);
@@ -147,6 +147,6 @@ class DartmonConfig {
         break;
       }
     }
-    timeout ??= Duration(milliseconds: 20);
+    timeout ??= Duration(seconds: 1);
   }
 }
