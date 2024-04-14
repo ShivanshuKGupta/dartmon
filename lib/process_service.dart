@@ -34,10 +34,10 @@ class ProcessService {
     );
     isRunning = true;
     process!.stdout.transform(utf8.decoder).listen((data) {
-      print(data);
+      stdout.write(data);
     });
     process!.stderr.transform(utf8.decoder).listen((data) {
-      print(data);
+      stdout.write(data);
     });
     process!.exitCode.then((code) {
       process = null;

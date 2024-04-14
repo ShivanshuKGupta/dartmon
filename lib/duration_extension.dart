@@ -8,7 +8,7 @@ extension DurationExtension on Duration {
   /// This method also supports floating point numbers.
   static Duration? tryParse(String value) {
     value = value.trim();
-    String unit = value.replaceAll(RegExp(r'[0-9]'), '');
+    String unit = value.replaceAll(RegExp(r'[0-9\.]'), '');
     double? number;
     int seconds = 0;
     int milliseconds = 0;

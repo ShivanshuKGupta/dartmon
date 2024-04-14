@@ -141,6 +141,7 @@ class DartmonConfig {
       handled = handled || ignoreHandler(option, value);
       handled = handled || timeoutHandler(option, value);
       handled = handled || fileHandler(option, value);
+      handled = handled || configHandler(option, value);
 
       if (!handled) {
         handleDartArguments(args.sublist(i));
@@ -148,5 +149,6 @@ class DartmonConfig {
       }
     }
     timeout ??= Duration(seconds: 1);
+    if (cmd == null) throw "Nothing to run!";
   }
 }
