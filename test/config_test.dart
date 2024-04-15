@@ -31,8 +31,10 @@ void main() {
       "'lib/dartmon.dart,lib/config.dart,lib/action.dart'",
       "--watch",
       "lib/dartmon.dart,lib/config.dart,lib/action.dart",
+      "run",
     ]);
     final files = config.files.map((e) => e.path);
+    print("files: $files");
     expect(
         files.contains('lib/dartmon.dart') &&
             files.contains('lib/config.dart') &&
@@ -54,6 +56,7 @@ void main() {
     config.construct([
       "-e",
       ".dart,.yaml,py",
+      "run",
     ]);
     expect(
         config.ext.contains('.dart') &&
@@ -68,6 +71,7 @@ void main() {
       "test/config_test.dart,lib/config.dart",
       "--ignore",
       "hehe.dart",
+      "run",
     ]);
     expect(config.ignoreFiles.contains('hehe.dart'), false);
   });
@@ -76,6 +80,7 @@ void main() {
     config.construct([
       "--timeout",
       "10ms",
+      "run",
     ]);
     expect(config.timeout != null, true);
     expect(config.timeout!.inMilliseconds, 10);
@@ -83,12 +88,14 @@ void main() {
     config.construct([
       "--timeout",
       "50",
+      "run",
     ]);
     expect(config.timeout!.inSeconds, 50);
     config = DartmonConfig();
     config.construct([
       "--timeout",
       "90s",
+      "run",
     ]);
     expect(config.timeout!.inSeconds, 90);
     config = DartmonConfig();
@@ -101,7 +108,34 @@ void main() {
     final config = DartmonConfig();
     config.construct([
       "--recursive",
+      "run",
     ]);
     expect(config.recursive, true);
+  });
+  test("ignore-files", () {
+    final config = DartmonConfig();
+    config.construct([
+      "--ignore",
+      "F:\\S_Data\\Flutter_Projects\\dartmon\\lib\\action.dart",
+      "run",
+    ]);
+    print("config.ignoreFiles= ${config.ignoreFiles}");
+    expect(
+        config.ignoreFiles
+            .contains('f:/s_data/flutter_projects/dartmon/lib/action.dart'),
+        true);
+  });
+  test("ignore-dir", () {
+    final config = DartmonConfig();
+    config.construct([
+      "--ignore",
+      "F:\\S_Data\\Flutter_Projects\\dartmon\\lib",
+      "run",
+    ]);
+    print("config.ignoreDirectories= ${config.ignoreDirectories}");
+    expect(
+        config.ignoreDirectories
+            .contains('f:/s_data/flutter_projects/dartmon/lib'),
+        true);
   });
 }

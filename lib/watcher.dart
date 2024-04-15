@@ -44,23 +44,23 @@ class Watcher {
 
   Future<void> onFileModify(FileSystemEvent event) async {
     if (event.isDirectory) return;
-    String dir = event.path
-        .split('/')
-        .sublist(0, event.path.split('/').length - 1)
-        .join('/');
-    if (config.ignoreFiles.contains(event.path) ||
+    final path =
+        File(event.path).absolute.path.toLowerCase().replaceAll('\\', '/');
+    String dir =
+        path.split('/').sublist(0, path.split('/').length - 1).join('/');
+    if (config.ignoreFiles.contains(path) ||
         config.ignoreDirectories.contains(dir)) {
-      print('Ignoring file: ${event.path}');
+      print('Ignoring file: ${path}');
       return;
     }
     if (event.type == FileSystemEvent.modify) {
-      print('File modified: ${event.path}');
+      print('File modified: ${path}');
     } else if (event.type == FileSystemEvent.create) {
-      print('File created: ${event.path}');
+      print('File created: ${path}');
     } else if (event.type == FileSystemEvent.delete) {
-      print('File deleted: ${event.path}');
+      print('File deleted: ${path}');
     } else if (event.type == FileSystemEvent.move) {
-      print('File moved: ${event.path}');
+      print('File moved: ${path}');
     }
     process.restart(config.timeout!);
   }

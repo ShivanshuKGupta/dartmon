@@ -150,5 +150,15 @@ class DartmonConfig {
     }
     timeout ??= Duration(seconds: 1);
     if (cmd == null) throw "Nothing to run!";
+
+    /// Making sure the directories are absolute
+    ignoreDirectories = ignoreDirectories.map((e) {
+      return Directory(e).absolute.path.toLowerCase().replaceAll('\\', '/');
+    }).toList();
+
+    /// Making sure the files are absolute
+    ignoreFiles = ignoreFiles.map((e) {
+      return File(e).absolute.path.toLowerCase().replaceAll('\\', '/');
+    }).toList();
   }
 }

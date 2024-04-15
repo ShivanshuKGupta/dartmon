@@ -100,7 +100,7 @@ extension on DartmonConfig {
   bool helpHandler(String option, String? value) {
     if (!(option == '--help' || option == '-h')) return false;
     print("TODO: Show help message here");
-    return true;
+    exit(0);
   }
 
   bool versionHandler(String option, String? value) {
