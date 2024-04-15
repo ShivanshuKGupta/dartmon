@@ -139,6 +139,8 @@ extension on DartmonConfig {
     cmd = 'dart';
     args = arguments;
     directories.add(Directory('lib'));
+    directories.add(Directory('bin'));
+    files.add(File('pubspec.yaml'));
     return true;
   }
 }

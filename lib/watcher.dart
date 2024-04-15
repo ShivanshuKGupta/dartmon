@@ -50,17 +50,17 @@ class Watcher {
         path.split('/').sublist(0, path.split('/').length - 1).join('/');
     if (config.ignoreFiles.contains(path) ||
         config.ignoreDirectories.contains(dir)) {
-      print('Ignoring file: ${path}');
+      print('Ignoring file: ${event.path}');
       return;
     }
     if (event.type == FileSystemEvent.modify) {
-      print('File modified: ${path}');
+      print('File modified: ${event.path}');
     } else if (event.type == FileSystemEvent.create) {
-      print('File created: ${path}');
+      print('File created: ${event.path}');
     } else if (event.type == FileSystemEvent.delete) {
-      print('File deleted: ${path}');
+      print('File deleted: ${event.path}');
     } else if (event.type == FileSystemEvent.move) {
-      print('File moved: ${path}');
+      print('File moved: ${event.path}');
     }
     process.restart(config.timeout!);
   }
