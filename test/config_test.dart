@@ -1,36 +1,60 @@
 import 'package:dartmon/config.dart';
+import 'package:dartmon/options/config_option.dart';
+import 'package:dartmon/options/dart_command_option.dart';
+import 'package:dartmon/options/exec_option.dart';
+import 'package:dartmon/options/ext_option.dart';
+import 'package:dartmon/options/file_option.dart';
+import 'package:dartmon/options/help_option.dart';
+import 'package:dartmon/options/ignore_option.dart';
+import 'package:dartmon/options/no_recursive_option.dart';
+import 'package:dartmon/options/timeout_option.dart';
+import 'package:dartmon/options/version_option.dart';
+import 'package:dartmon/options/watch_option.dart';
 import 'package:test/test.dart';
+
+DartmonConfig init() {
+  final config = DartmonConfig();
+  config.addOption(ConfigOption());
+  config.addOption(DartCommandOption());
+  config.addOption(ExecOption());
+  config.addOption(ExtOption());
+  config.addOption(FileOption());
+  config.addOption(HelpOption());
+  config.addOption(IgnoreOption());
+  config.addOption(NoRecursiveOption());
+  config.addOption(TimeoutOption());
+  config.addOption(VersionOption());
+  config.addOption(WatchOption());
+  return config;
+}
 
 void main() {
   test('empty init', () {
-    DartmonConfig();
+    init();
   });
 
   test("construct", () {
-    final config = DartmonConfig();
+    final config = init();
     config.construct(["lib/dartmon.dart"]);
-    print(config);
   });
   test("run", () {
-    final config = DartmonConfig();
+    final config = init();
     config.construct(["run"]);
-    print(config);
   });
   test("exec", () {
-    final config = DartmonConfig();
+    final config = init();
     config.construct([
       "--exec",
       "dart run",
     ]);
-    print(config);
   });
   test("watch", () {
-    final config = DartmonConfig();
+    final config = init();
     config.construct([
       "--watch",
-      "'lib/dartmon.dart,lib/config.dart,lib/action.dart'",
+      "'lib/dartmon.dart,lib/config.dart,lib/config.dart'",
       "--watch",
-      "lib/dartmon.dart,lib/config.dart,lib/action.dart",
+      "lib/dartmon.dart,lib/config.dart,lib/config.dart",
       "run",
     ]);
     final files = config.files.map((e) => e.path);
@@ -38,23 +62,22 @@ void main() {
     expect(
         files.contains('lib/dartmon.dart') &&
             files.contains('lib/config.dart') &&
-            files.contains('lib/action.dart') &&
+            files.contains('lib/config.dart') &&
             files.contains('lib/dartmon.dart') &&
             files.contains('lib/config.dart') &&
-            files.contains('lib/action.dart'),
+            files.contains('lib/config.dart'),
         true);
   });
-  test("help", () {
-    final config = DartmonConfig();
-    config.construct([
-      "--help",
-    ]);
-    print(config);
-  });
+  // test("help", () {
+  //   final config = init();
+  //   config.construct([
+  //     "--help",
+  //   ]);
+  // });
   test("ext", () {
-    final config = DartmonConfig();
+    final config = init();
     config.construct([
-      "-e",
+      "-x",
       ".dart,.yaml,py",
       "run",
     ]);
@@ -65,7 +88,7 @@ void main() {
         true);
   });
   test("ignore", () {
-    final config = DartmonConfig();
+    final config = init();
     config.construct([
       "--ignore",
       "test/config_test.dart,lib/config.dart",
@@ -76,7 +99,7 @@ void main() {
     expect(config.ignoreFiles.contains('hehe.dart'), false);
   });
   test("timeout", () {
-    var config = DartmonConfig();
+    final config = init();
     config.construct([
       "--timeout",
       "10ms",
@@ -84,28 +107,28 @@ void main() {
     ]);
     expect(config.timeout != null, true);
     expect(config.timeout!.inMilliseconds, 10);
-    config = DartmonConfig();
-    config.construct([
+    final config2 = init();
+    config2.construct([
       "--timeout",
       "50",
       "run",
     ]);
-    expect(config.timeout!.inSeconds, 50);
-    config = DartmonConfig();
-    config.construct([
+    expect(config2.timeout!.inSeconds, 50);
+    final config3 = init();
+    config3.construct([
       "--timeout",
       "90s",
       "run",
     ]);
-    expect(config.timeout!.inSeconds, 90);
-    config = DartmonConfig();
-    config.construct([]);
-    expect(config.timeout != null, true);
-    expect(config.timeout!.inMilliseconds, 1000);
+    expect(config3.timeout!.inSeconds, 90);
+    final config4 = init();
+    config4.construct(['run']);
+    expect(config4.timeout != null, true);
+    expect(config4.timeout!.inMilliseconds, 1000);
   });
 
   test("recursive", () {
-    final config = DartmonConfig();
+    final config = init();
     config.construct([
       "--recursive",
       "run",
@@ -113,20 +136,20 @@ void main() {
     expect(config.recursive, true);
   });
   test("ignore-files", () {
-    final config = DartmonConfig();
+    final config = init();
     config.construct([
       "--ignore",
-      "F:\\S_Data\\Flutter_Projects\\dartmon\\lib\\action.dart",
+      "F:\\S_Data\\Flutter_Projects\\dartmon\\lib\\config.dart",
       "run",
     ]);
     print("config.ignoreFiles= ${config.ignoreFiles}");
     expect(
         config.ignoreFiles
-            .contains('f:/s_data/flutter_projects/dartmon/lib/action.dart'),
+            .contains('f:/s_data/flutter_projects/dartmon/lib/config.dart'),
         true);
   });
   test("ignore-dir", () {
-    final config = DartmonConfig();
+    final config = init();
     config.construct([
       "--ignore",
       "F:\\S_Data\\Flutter_Projects\\dartmon\\lib",

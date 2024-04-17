@@ -14,7 +14,7 @@ class ExtOption extends Option {
   @override
   List<String> get invocations => [
         '--ext',
-        '-e',
+        '-x',
       ];
 
   @override

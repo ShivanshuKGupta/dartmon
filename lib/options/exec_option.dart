@@ -22,7 +22,6 @@ class ExecOption extends Option {
   List<String> get invocations => [
         '--exec',
         '-e',
-        '-x',
       ];
 
   @override
