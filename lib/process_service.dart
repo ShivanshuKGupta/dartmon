@@ -3,12 +3,15 @@ import 'dart:io';
 import 'package:dartmon/config.dart';
 
 class ProcessService {
-  Process? process;
-  bool isRunning = false;
-  DartmonConfig config;
-  int executionIndex = 0;
+  ProcessService._();
 
-  ProcessService(this.config) {
+  static Process? process;
+  static bool isRunning = false;
+  static late final DartmonConfig config;
+  static int executionIndex = 0;
+
+  static void init(DartmonConfig config) {
+    ProcessService.config = config;
     stdin.listen(onStdinEvent);
     ProcessSignal.sigint.watch().listen((signal) {
       stop();
@@ -22,16 +25,18 @@ class ProcessService {
     }
   }
 
-  Future<void> start() async {
+  static Future<void> start() async {
     ++executionIndex;
     if (process != null) {
       stop();
       return;
     }
+    print("Starting: '${config.cmd} ${config.args.join(' ')}'...");
     process = await Process.start(
       config.cmd!,
       config.args,
     );
+    print("Started!");
     isRunning = true;
     process!.stdout.transform(utf8.decoder).listen((data) {
       stdout.write(data);
@@ -52,12 +57,12 @@ class ProcessService {
     });
   }
 
-  void stop() {
+  static void stop() {
     isRunning = false;
     process?.kill();
   }
 
-  void restart(Duration timeout) async {
+  static void restart(Duration timeout) async {
     int tmp = ++executionIndex;
     await Future.delayed(timeout);
     if (tmp != executionIndex) return;
@@ -65,7 +70,7 @@ class ProcessService {
     start();
   }
 
-  void onStdinEvent(data) {
+  static void onStdinEvent(data) {
     if (!isRunning || process == null) {
       start();
       return;

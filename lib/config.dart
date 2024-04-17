@@ -2,22 +2,36 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:dartmon/action.dart';
+import 'package:dartmon/option.dart';
 import 'package:dartmon/duration_extension.dart';
+import 'package:dartmon/options/help_option.dart';
+import 'package:dartmon/unknown_option.dart';
 
-part 'construct_config.g.dart';
+// part 'construct_config.g.dart';
 
 class DartmonConfig {
+  /// The command to be executed
   String? cmd;
+
+  /// The arguments to be passed to the command
   List<String> args = [];
+
+  /// The command to be executed along with the arguments
   String get exec {
     if (args.isEmpty) return cmd!;
     return '$cmd ${args.join(' ')}';
   }
 
+  /// The directories to watch
   List<Directory> directories = [];
+
+  /// The files to watch
   List<File> files = [];
-  List<String> ext = []; // All extensions will start with a dot
+
+  /// The extensions to watch, all extensions will have a leading dot
+  List<String> ext = [];
+
+  /// The directories to ignore
   List<String> ignoreDirectories = [
     '.dart_tool',
     '.git',
@@ -31,6 +45,8 @@ class DartmonConfig {
     'node_modules',
     '__pycache__',
   ];
+
+  /// The files to ignore
   List<String> ignoreFiles = [
     '.gitignore',
     '.gitkeep',
@@ -38,9 +54,26 @@ class DartmonConfig {
     'pubspec.lock',
     'pubspec.yaml',
   ];
+
+  /// The timeout for the command to run
   Duration? timeout;
+
+  /// Whether to watch the directories recursively
   bool recursive = true;
-  List<DartmonAction> actions = [];
+
+  /// The options to be added to the command line arguments
+  List<Option> options = [];
+
+  /// The options which are to be applied on unknown arguments
+  List<UnknownOption> unknownOptions = [];
+
+  /// the whole command line arguments given to the dartmon
+  List<String> arguments = [];
+
+  /// The current argument index which is being parsed
+  /// An option may choose to parse multiple arguments
+  /// and thus can make use of this index to parse the next argument
+  int currentArgumentIndex = 0;
 
   DartmonConfig({
     this.cmd,
@@ -51,8 +84,7 @@ class DartmonConfig {
     List<String>? ignoreDirectories,
     List<String>? ignoreFiles,
     this.timeout,
-    this.recursive = false,
-    List<DartmonAction>? actions,
+    this.recursive = true,
   }) {
     this.args = args ?? this.args;
     this.directories = directories ?? this.directories;
@@ -60,7 +92,6 @@ class DartmonConfig {
     this.ext = ext ?? this.ext;
     this.ignoreDirectories = ignoreDirectories ?? this.ignoreDirectories;
     this.ignoreFiles = ignoreFiles ?? this.ignoreFiles;
-    this.actions = actions ?? this.actions;
   }
 
   DartmonConfig.fromJson(Map<String, dynamic> json) {
@@ -87,9 +118,6 @@ class DartmonConfig {
         : ignoreFiles;
     timeout = DurationExtension.tryParse(json['timeout'].toString()) ?? timeout;
     recursive = json['recursive'] ?? recursive;
-    actions = json['actions'] != null
-        ? List<DartmonAction>.from(json['actions'])
-        : actions;
   }
 
   Map<String, dynamic> toJson() {
@@ -103,7 +131,6 @@ class DartmonConfig {
       'ignoreFiles': ignoreFiles,
       'timeout': timeout?.toUnitString(),
       'recursive': recursive,
-      'actions': actions,
     };
   }
 
@@ -112,17 +139,30 @@ class DartmonConfig {
     return toJson().toString();
   }
 
-  void construct(List<String> args) {
-    if (args.isEmpty) {
-      helpHandler("-h", null);
+  void addOption(Option option) {
+    option.config = this;
+    if (option is UnknownOption) {
+      unknownOptions.add(option);
+    } else {
+      options.add(option);
+    }
+  }
+
+  void construct(List<String> arguments) {
+    this.arguments = arguments;
+    if (arguments.isEmpty) {
+      options.firstWhere((element) => element is HelpOption).handler(null);
       exit(0);
     }
-    for (int i = 0; i < args.length; ++i) {
-      String option = args[i];
+    for (currentArgumentIndex = 0;
+        currentArgumentIndex < arguments.length;
+        ++currentArgumentIndex) {
+      String option = arguments[currentArgumentIndex];
       String? value;
-      if (args.length > i + 1 && !args[i + 1].startsWith('-')) {
-        i++;
-        value = args[i];
+      if (arguments.length > currentArgumentIndex + 1 &&
+          !arguments[currentArgumentIndex + 1].startsWith('-')) {
+        currentArgumentIndex++;
+        value = arguments[currentArgumentIndex];
         if (value.startsWith('"') && value.endsWith('"')) {
           value = value.substring(1, value.length - 1);
         } else if (value.startsWith("'") && value.endsWith("'")) {
@@ -131,27 +171,35 @@ class DartmonConfig {
         value = value.trim();
         value = value.replaceAll(RegExp(r'\s{2,}'), ' ');
       }
+
       bool handled = false;
-      handled = handled || helpHandler(option, value);
-      handled = handled || versionHandler(option, value);
-      handled = handled || execHandler(option, value);
-      handled = handled || recursiveHandler(option, value);
-      handled = handled || watchHandler(option, value);
-      handled = handled || extHandler(option, value);
-      handled = handled || ignoreHandler(option, value);
-      handled = handled || timeoutHandler(option, value);
-      handled = handled || fileHandler(option, value);
-      handled = handled || configHandler(option, value);
+      for (int i = 0; i < options.length; i++) {
+        if (options[i].invocations.contains(option)) {
+          options[i].handler(value);
+          handled = true;
+          break;
+        }
+      }
 
       if (!handled) {
-        handleDartArguments(args.sublist(i));
-        break;
+        for (int i = 0; i < unknownOptions.length; i++) {
+          handled = handled || unknownOptions[i].handler(value);
+          if (handled) break;
+        }
+      }
+
+      if (!handled) {
+        throw "Unknown option: $option";
       }
     }
+
+    /// Defaults
     timeout ??= Duration(seconds: 1);
+
+    /// Checks
     if (cmd == null) throw "Nothing to run!";
 
-    /// Making sure the directories are absolute
+    // Making sure the directories are absolute
     ignoreDirectories = ignoreDirectories.map((e) {
       return Directory(e).absolute.path.toLowerCase().replaceAll('\\', '/');
     }).toList();

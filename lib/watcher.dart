@@ -5,10 +5,9 @@ import 'package:dartmon/process_service.dart';
 
 class Watcher {
   final DartmonConfig config;
-  late final ProcessService process;
 
   Watcher(this.config) {
-    process = ProcessService(config);
+    ProcessService.init(config);
   }
 
   Future<void> start() async {
@@ -39,7 +38,11 @@ class Watcher {
           .listen(onFileModify);
     }
     print('Starting: \'${config.exec}\'...');
-    process.start();
+    try {
+      await ProcessService.start();
+    } catch (e) {
+      print("Error starting process: $e");
+    }
   }
 
   Future<void> onFileModify(FileSystemEvent event) async {
@@ -62,6 +65,6 @@ class Watcher {
     } else if (event.type == FileSystemEvent.move) {
       print('File moved: ${event.path}');
     }
-    process.restart(config.timeout!);
+    ProcessService.restart(config.timeout!);
   }
 }
