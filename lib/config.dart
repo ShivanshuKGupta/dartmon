@@ -1,7 +1,6 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
+import 'package:dartmon/logger.dart';
 import 'package:dartmon/option.dart';
 import 'package:dartmon/duration_extension.dart';
 import 'package:dartmon/options/help_option.dart';
@@ -73,7 +72,10 @@ class DartmonConfig {
   /// The current argument index which is being parsed
   /// An option may choose to parse multiple arguments
   /// and thus can make use of this index to parse the next argument
-  int currentArgumentIndex = 0;
+  int nextArgumentIndex = 0;
+
+  /// The logger
+  final Logger _logger = Logger('DartmonConfig');
 
   DartmonConfig({
     this.cmd,
@@ -142,27 +144,31 @@ class DartmonConfig {
   void addOption(Option option) {
     option.config = this;
     if (option is UnknownOption) {
+      _logger.write("Adding an unknown option: $option");
       unknownOptions.add(option);
     } else {
+      _logger.write("Adding an option: $option");
       options.add(option);
     }
   }
 
   void construct(List<String> arguments) {
+    _logger.write("Constructing config from arguments: $arguments");
     this.arguments = arguments;
     if (arguments.isEmpty) {
+      _logger.write("Arguments are empty! Showing help and exiting...");
       options.firstWhere((element) => element is HelpOption).handler(null);
       exit(0);
     }
-    for (currentArgumentIndex = 0;
-        currentArgumentIndex < arguments.length;
-        ++currentArgumentIndex) {
-      String option = arguments[currentArgumentIndex];
+    for (nextArgumentIndex = 0;
+        nextArgumentIndex < arguments.length;
+        ++nextArgumentIndex) {
+      String option = arguments[nextArgumentIndex];
       String? value;
-      if (arguments.length > currentArgumentIndex + 1 &&
-          !arguments[currentArgumentIndex + 1].startsWith('-')) {
-        currentArgumentIndex++;
-        value = arguments[currentArgumentIndex];
+      if (arguments.length > nextArgumentIndex + 1 &&
+          !arguments[nextArgumentIndex + 1].startsWith('-')) {
+        nextArgumentIndex++;
+        value = arguments[nextArgumentIndex];
         if (value.startsWith('"') && value.endsWith('"')) {
           value = value.substring(1, value.length - 1);
         } else if (value.startsWith("'") && value.endsWith("'")) {
@@ -171,10 +177,13 @@ class DartmonConfig {
         value = value.trim();
         value = value.replaceAll(RegExp(r'\s{2,}'), ' ');
       }
+      _logger.write("Parsing option: $option with value: $value");
 
       bool handled = false;
       for (int i = 0; i < options.length; i++) {
         if (options[i].invocations.contains(option)) {
+          _logger.write(
+              "Handling using option: ${options[i].name} with value: $value");
           options[i].handler(value);
           handled = true;
           break;
@@ -183,21 +192,39 @@ class DartmonConfig {
 
       if (!handled) {
         for (int i = 0; i < unknownOptions.length; i++) {
+          _logger.write(
+              "Handling using unknown option: ${unknownOptions[i].name} with value: $value");
           handled = handled || unknownOptions[i].handler(value);
-          if (handled) break;
+          if (handled) {
+            _logger.write(
+                "Handled using unknown option: ${unknownOptions[i].name}");
+            break;
+          } else {
+            _logger.write(
+                "Handling failed using unknown option: ${unknownOptions[i].name}");
+          }
         }
       }
 
       if (!handled) {
+        _logger.write(
+            "No option was able to handle the argument: $option.\nThrowing an error");
         throw "Unknown option: $option";
       }
     }
 
     /// Defaults
-    timeout ??= Duration(seconds: 1);
+    if (timeout == null) {
+      _logger.write("Timeout is set to default: 1 second");
+      timeout = Duration(seconds: 1);
+    }
 
     /// Checks
-    if (cmd == null) throw "Nothing to run!";
+    if (cmd == null) {
+      _logger.write("No command was set to run! Below is the config instance:");
+      _logger.write(toJson());
+      throw "Nothing to run!";
+    }
 
     // Making sure the directories are absolute
     ignoreDirectories = ignoreDirectories.map((e) {
@@ -208,5 +235,7 @@ class DartmonConfig {
     ignoreFiles = ignoreFiles.map((e) {
       return File(e).absolute.path.toLowerCase().replaceAll('\\', '/');
     }).toList();
+
+    _logger.write("Config constructed successfully:\n${toJson()}");
   }
 }

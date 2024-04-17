@@ -6,7 +6,7 @@ class DartCommandOption extends UnknownOption {
   @override
   bool handler(String? value) {
     config.cmd = 'dart';
-    config.args = config.arguments.sublist(config.currentArgumentIndex);
+    config.args = config.arguments.sublist(config.nextArgumentIndex);
     config.directories.add(Directory('lib'));
     config.directories.add(Directory('bin'));
     config.files.add(File('pubspec.yaml'));

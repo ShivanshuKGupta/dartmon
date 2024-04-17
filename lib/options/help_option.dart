@@ -19,7 +19,7 @@ class HelpOption extends Option<bool> {
 
   @override
   bool handler(String? value) {
-    if (config.currentArgumentIndex == config.arguments.length - 1) {
+    if (config.nextArgumentIndex >= config.arguments.length) {
       print(
           "A command-line utility for Dart that automatically restarts your app when files change.");
       print("\nUsage: dartmon <command|dart-file> [arguments]");
@@ -52,7 +52,7 @@ class HelpOption extends Option<bool> {
       print(
           "\nRun 'dartmon --help <command>' for more information about a command.");
     } else {
-      value = config.arguments[config.currentArgumentIndex + 1];
+      value = config.arguments[config.nextArgumentIndex];
       final command = config.options.firstWhere(
           (element) => element.invocations.contains(value),
           orElse: () => throw 'Command not found');

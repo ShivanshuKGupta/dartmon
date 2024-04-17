@@ -1,4 +1,5 @@
 import 'package:dartmon/config.dart';
+import 'package:dartmon/logger.dart';
 import 'package:dartmon/options/config_option.dart';
 import 'package:dartmon/options/dart_command_option.dart';
 import 'package:dartmon/options/exec_option.dart';
@@ -14,6 +15,9 @@ import 'package:dartmon/process_service.dart';
 import 'package:dartmon/watcher.dart';
 
 int run(List<String> arguments) {
+  Logger("dartmon")
+      .write("---------------------------------------------------------"
+          "\nStarting dartmon time: ${DateTime.now()}");
   final config = DartmonConfig();
   config.addOption(ConfigOption());
   config.addOption(DartCommandOption());
