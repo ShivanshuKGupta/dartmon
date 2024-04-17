@@ -37,6 +37,7 @@ class HelpOption extends Option<bool> {
           print("  ${option.invocations.join(' ')}\t${option.help}");
         }
       }
+      bool commandFound = false;
       print("\nAvailable Commands:");
       for (final option in config.options) {
         bool isAGlobalOption = false;
@@ -47,8 +48,16 @@ class HelpOption extends Option<bool> {
           }
         }
         if (!isAGlobalOption) {
+          commandFound = true;
           print("  ${option.invocations.join(' ')}\t${option.help}");
         }
+      }
+      if (!commandFound) {
+        print("  No commands found.");
+      }
+      print("\nOther functionalities:");
+      for (final option in config.unknownOptions) {
+        print("\n${option.help}\n${option.usage}");
       }
       print(
           "\nRun 'dartmon --help <command>' for more information about a command.");

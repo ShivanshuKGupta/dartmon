@@ -35,12 +35,13 @@ class FileOption extends UnknownOption {
   }
 
   @override
-  String get help => 'The file to run';
+  String get help =>
+      'You can run a file using dartmon just like you would using dart.';
 
   @override
   String get name => 'file';
 
   @override
   String get usage =>
-      'Usage: dartmon <file>\n\nExample: dartmon main.dart\n\nSupported extensions: .dart, .py, .js\n\nRuns the file with the appropriate command';
+      'Usage: dartmon <file>\nExample: dartmon main.dart\nSupported extensions for files: .dart, .py, .js\nIt runs .dart files with dart, .py files with python, and .js files with node.';
 }

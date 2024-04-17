@@ -17,12 +17,12 @@ class DartCommandOption extends UnknownOption {
   }
 
   @override
-  String get help => 'The Dart command to run';
+  String get help => 'You can run any dart command using dartmon.';
 
   @override
   String get name => "dart";
 
   @override
   String get usage =>
-      'Usage: dartmon <dart commands>\n\nExample: dartmon run main.dart\n\nRuns the Dart command with the all the following arguments passed to it';
+      'Usage: dartmon <dart commands>\nExample: dartmon run main.dart args_for_main_dart\nRuns the Dart command with the all the following arguments passed to it';
 }
