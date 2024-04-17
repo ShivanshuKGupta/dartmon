@@ -38,11 +38,7 @@ class Watcher {
           .listen(onFileModify);
     }
     print('Starting: \'${config.exec}\'...');
-    try {
-      await ProcessService.start();
-    } catch (e) {
-      print("Error starting process: $e");
-    }
+    await ProcessService.start();
   }
 
   Future<void> onFileModify(FileSystemEvent event) async {

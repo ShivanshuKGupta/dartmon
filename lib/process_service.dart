@@ -31,12 +31,15 @@ class ProcessService {
       stop();
       return;
     }
-    print("Starting: '${config.cmd} ${config.args.join(' ')}'...");
-    process = await Process.start(
-      config.cmd!,
-      config.args,
-    );
-    print("Started!");
+    try {
+      process = await Process.start(
+        config.cmd!,
+        config.args,
+      );
+    } catch (e) {
+      print("Error starting process: $e");
+      return;
+    }
     isRunning = true;
     process!.stdout.transform(utf8.decoder).listen((data) {
       stdout.write(data);
