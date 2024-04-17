@@ -11,17 +11,30 @@ Usage: dartmon <command|dart-file> [arguments]
 
 Global options:
   --config -c   Load configuration from a JSON file.
-  --exec -e     Execute the given command and restart on file changes.
+  --exec -e     Execute the given command and restart on file changes.        
   --ext -x      Watch files with the given extensions only.
   --help -h     Print this usage information.
   --ignore -i   Ignore the given files and directories.
   --no-recursive -nr    Do not watch directories recursively.
   --timeout -t  Set the timeout for the command.
   --version -v  Print the version of dartmon.
-  --watch -w    Watch the given files and directories for changes.    
+  --watch -w    Watch the given files and directories for changes.
 
 Available Commands:
-  More commands will be here soon...
+  No commands found.
+
+Other functionalities:
+
+You can run any dart command using dartmon.
+Usage: dartmon <dart commands>
+Example: dartmon run main.dart args_for_main_dart
+Runs the Dart command with the all the following arguments passed to it       
+
+You can run a file using dartmon just like you would using dart.
+Usage: dartmon <file>
+Example: dartmon main.dart
+Supported extensions for files: .dart, .py, .js
+It runs .dart files with dart, .py files with python, and .js files with node.
 
 Run 'dartmon --help <command>' for more information about a command.
 ```
