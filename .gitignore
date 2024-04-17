@@ -3,3 +3,4 @@
 .dart_tool/
 *.exe
 dartmon_logs.txt
+.vscode/

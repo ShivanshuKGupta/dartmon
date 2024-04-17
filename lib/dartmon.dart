@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartmon/config.dart';
 import 'package:dartmon/logger.dart';
 import 'package:dartmon/options/config_option.dart';
@@ -11,10 +13,9 @@ import 'package:dartmon/options/no_recursive_option.dart';
 import 'package:dartmon/options/timeout_option.dart';
 import 'package:dartmon/options/version_option.dart';
 import 'package:dartmon/options/watch_option.dart';
-import 'package:dartmon/process_service.dart';
 import 'package:dartmon/watcher.dart';
 
-int run(List<String> arguments) {
+void run(List<String> arguments) {
   Logger("dartmon")
       .write("---------------------------------------------------------"
           "\nStarting dartmon time: ${DateTime.now()}");
@@ -35,10 +36,9 @@ int run(List<String> arguments) {
     config.construct(arguments);
   } catch (e) {
     print(e);
-    return 1;
+    exit(1);
   }
 
   final watcher = Watcher(config);
   watcher.start();
-  return 0;
 }
