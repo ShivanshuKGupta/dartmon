@@ -5,7 +5,10 @@ class Logger {
   final String name;
 
   Logger(this.name) {
-    _file ??= File('dartmon.log');
+    String executableDirectory = File(Platform.resolvedExecutable).parent.path;
+
+    /// below log file is created in the directory of the executable
+    _file ??= File('$executableDirectory/dartmon.log');
   }
 
   void write(dynamic message) {

@@ -4,6 +4,10 @@ import 'dart:io';
 import 'package:dartmon/config/config.dart';
 import 'package:dartmon/services/process_service.dart';
 
+/// The watcher class is responsible for watching the files and directories
+/// And restarting the process when a file is modified
+///
+/// Here, we apply checks for ignore directories and files
 class Watcher {
   final DartmonConfig config;
 
@@ -17,6 +21,11 @@ class Watcher {
     if (dirsToWatch.isEmpty) {
       dirsToWatch.add(Directory('.'));
     }
+
+    /// We first find all files with the given extensions
+    /// and add them to the filesToWatch list
+    ///
+    /// Note: we only find files in the directories to watch
     if (config.ext.isNotEmpty) {
       print('Finding files with extensions: ${config.ext}');
       for (var dir in dirsToWatch) {
@@ -30,6 +39,8 @@ class Watcher {
         }
       }
     }
+
+    /// Adding listeners to the files and directories changes
     for (int i = 0; i < filesToWatch.length; i++) {
       filesToWatch[i].watch(events: FileSystemEvent.all).listen(onFileModify);
     }
@@ -38,12 +49,22 @@ class Watcher {
           .watch(events: FileSystemEvent.all, recursive: config.recursive)
           .listen(onFileModify);
     }
+
     print('Starting: \'${config.exec}\'...');
+
+    /// After all the prepararyion, we start the process
     await ProcessService.start();
   }
 
   Future<void> onFileModify(FileSystemEvent event) async {
     if (event.isDirectory) return;
+
+    /// We ignore the files and directories that are in the ignore list
+    ///
+    /// Note: for comparing we first made all the paths lowercase, replaced all
+    /// the backslashes with forward slashes and then compared.
+    ///
+    /// We did a similar thing in the [config.construct] method
     final path =
         File(event.path).absolute.path.toLowerCase().replaceAll('\\', '/');
     String dir =

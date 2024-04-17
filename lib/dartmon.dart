@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dartmon/config/config.dart';
+import 'package:dartmon/options/version_option.dart';
 import 'package:dartmon/services/logger.dart';
 import 'package:dartmon/options/config_option.dart';
 import 'package:dartmon/options/dart_command_option.dart';
@@ -28,7 +29,7 @@ void run(List<String> arguments) {
   config.addOption(IgnoreOption());
   config.addOption(NoRecursiveOption());
   config.addOption(TimeoutOption());
-  // config.addOption(VersionOption());
+  config.addOption(VersionOption());
   config.addOption(WatchOption());
 
   try {
