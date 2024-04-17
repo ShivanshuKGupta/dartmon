@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:dartmon/config.dart';
-import 'package:dartmon/logger.dart';
+import 'package:dartmon/config/config.dart';
+import 'package:dartmon/services/logger.dart';
 import 'package:dartmon/options/config_option.dart';
 import 'package:dartmon/options/dart_command_option.dart';
 import 'package:dartmon/options/exec_option.dart';
@@ -11,9 +11,8 @@ import 'package:dartmon/options/help_option.dart';
 import 'package:dartmon/options/ignore_option.dart';
 import 'package:dartmon/options/no_recursive_option.dart';
 import 'package:dartmon/options/timeout_option.dart';
-import 'package:dartmon/options/version_option.dart';
 import 'package:dartmon/options/watch_option.dart';
-import 'package:dartmon/watcher.dart';
+import 'package:dartmon/services/watcher.dart';
 
 void run(List<String> arguments) {
   Logger("dartmon")
@@ -29,7 +28,7 @@ void run(List<String> arguments) {
   config.addOption(IgnoreOption());
   config.addOption(NoRecursiveOption());
   config.addOption(TimeoutOption());
-  config.addOption(VersionOption());
+  // config.addOption(VersionOption());
   config.addOption(WatchOption());
 
   try {

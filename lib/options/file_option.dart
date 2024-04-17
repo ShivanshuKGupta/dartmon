@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dartmon/unknown_option.dart';
+import 'package:dartmon/models/unknown_option.dart';
 
 class FileOption extends UnknownOption {
   @override

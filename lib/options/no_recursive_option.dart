@@ -1,8 +1,11 @@
-import 'package:dartmon/option.dart';
+import 'package:dartmon/models/option.dart';
 
 class NoRecursiveOption extends Option {
   @override
   handler(String? value) {
+    if (value != null) {
+      config.nextArgumentIndex--;
+    }
     config.recursive = false;
   }
 

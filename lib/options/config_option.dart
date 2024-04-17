@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dartmon/option.dart';
+import 'package:dartmon/models/option.dart';
 
 class ConfigOption extends Option<bool> {
   @override

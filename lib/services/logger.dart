@@ -5,7 +5,7 @@ class Logger {
   final String name;
 
   Logger(this.name) {
-    _file ??= File('dartmon_logs.txt');
+    _file ??= File('dartmon.log');
   }
 
   void write(dynamic message) {

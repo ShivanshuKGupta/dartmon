@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:dartmon/config.dart';
-import 'package:dartmon/logger.dart';
+import 'package:dartmon/config/config.dart';
+import 'package:dartmon/services/logger.dart';
 
 class ProcessService {
   ProcessService._();

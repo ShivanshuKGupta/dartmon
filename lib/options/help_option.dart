@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dartmon/option.dart';
+import 'package:dartmon/models/option.dart';
 
 class HelpOption extends Option<bool> {
   HelpOption() : super();
@@ -19,7 +19,8 @@ class HelpOption extends Option<bool> {
 
   @override
   bool handler(String? value) {
-    if (config.nextArgumentIndex >= config.arguments.length) {
+    if (value == null &&
+        config.nextArgumentIndex + 1 >= config.arguments.length) {
       print(
           "A command-line utility for Dart that automatically restarts your app when files change.");
       print("\nUsage: dartmon <command|dart-file> [arguments]");
@@ -52,10 +53,11 @@ class HelpOption extends Option<bool> {
       print(
           "\nRun 'dartmon --help <command>' for more information about a command.");
     } else {
-      value = config.arguments[config.nextArgumentIndex];
+      value ??= config.arguments[config.nextArgumentIndex + 1];
       final command = config.options.firstWhere(
           (element) => element.invocations.contains(value),
-          orElse: () => throw 'Command not found');
+          orElse: () =>
+              throw 'Neither a Command nor a Global Option was found for \'$value\'');
       print(command.usage);
     }
     exit(0);

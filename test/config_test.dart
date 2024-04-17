@@ -1,4 +1,4 @@
-import 'package:dartmon/config.dart';
+import 'package:dartmon/config/config.dart';
 import 'package:dartmon/options/config_option.dart';
 import 'package:dartmon/options/dart_command_option.dart';
 import 'package:dartmon/options/exec_option.dart';

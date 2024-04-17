@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dartmon/option.dart';
+import 'package:dartmon/models/option.dart';
 import 'package:dartmon/version.dart';
 
 class VersionOption extends Option {

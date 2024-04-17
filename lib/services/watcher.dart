@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:dartmon/config.dart';
-import 'package:dartmon/process_service.dart';
+import 'package:dartmon/config/config.dart';
+import 'package:dartmon/services/process_service.dart';
 
 class Watcher {
   final DartmonConfig config;

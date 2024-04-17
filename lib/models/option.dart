@@ -1,4 +1,4 @@
-import 'package:dartmon/config.dart';
+import 'package:dartmon/config/config.dart';
 
 abstract class Option<T> {
   String get name;

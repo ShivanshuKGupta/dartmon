@@ -1,3 +1,2 @@
-import 'dart:io' show Platform;
-
-final version = Platform.version;
+// Generated code: do not touch
+final version = "1.0.0";

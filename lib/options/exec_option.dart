@@ -1,4 +1,4 @@
-import 'package:dartmon/option.dart';
+import 'package:dartmon/models/option.dart';
 
 class ExecOption extends Option {
   @override

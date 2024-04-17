@@ -1,10 +1,13 @@
 import 'dart:io';
 
-import 'package:dartmon/unknown_option.dart';
+import 'package:dartmon/models/unknown_option.dart';
 
 class DartCommandOption extends UnknownOption {
   @override
   bool handler(String? value) {
+    if (value != null) {
+      print("value wasn't null in DartCommandOption handler: value = $value");
+    }
     config.cmd = 'dart';
     config.args = config.arguments.sublist(config.nextArgumentIndex);
     config.directories.add(Directory('lib'));
