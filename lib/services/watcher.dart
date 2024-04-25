@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dartmon/config/config.dart';
-import 'package:dartmon/services/process_service.dart';
+import 'package:dartmon/services/other_process_service.dart';
 
 /// The watcher class is responsible for watching the files and directories
 /// And restarting the process when a file is modified
@@ -10,9 +10,10 @@ import 'package:dartmon/services/process_service.dart';
 /// Here, we apply checks for ignore directories and files
 class Watcher {
   final DartmonConfig config;
+  late final OtherProcessService process;
 
   Watcher(this.config) {
-    ProcessService.init(config);
+    process = OtherProcessService(config);
   }
 
   Future<void> start() async {
@@ -53,7 +54,7 @@ class Watcher {
     print('Starting: \'${config.exec}\'...');
 
     /// After all the prepararyion, we start the process
-    await ProcessService.start();
+    await process.start();
   }
 
   Future<void> onFileModify(FileSystemEvent event) async {
@@ -83,6 +84,6 @@ class Watcher {
     } else if (event.type == FileSystemEvent.move) {
       print('File moved: ${event.path}');
     }
-    ProcessService.restart(config.timeout!);
+    process.restart();
   }
 }
