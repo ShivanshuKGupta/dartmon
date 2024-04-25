@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:dartmon/config/config.dart';
 import 'package:dartmon/services/logger.dart';
 
+/// This is the abstract class for the process service
+///
+/// Remember to dispose this class when you are done with it
 abstract class ProcessService {
   final DartmonConfig config;
   Process? process;
@@ -55,14 +58,16 @@ abstract class ProcessService {
   }
 
   void onAbortSignal(ProcessSignal event) {
-    stop();
+    dispose();
     exit(0);
   }
 
   dispose() {
+    logger.write('Disposing ProcessService...');
     stop();
+    logger.write('Removing Listeners from sigint...');
     sigintSignals.listen(null);
+    logger.write('Removing Listeners from sigterm...');
     sigtermSignals?.listen(null);
-    stdin.listen(null);
   }
 }

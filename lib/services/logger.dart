@@ -9,6 +9,8 @@ class Logger {
 
     /// below log file is created in the directory of the executable
     _file ??= File('$executableDirectory/dartmon.log');
+
+    print('Logging to: ${_file!.absolute.path}');
   }
 
   void write(dynamic message) {
