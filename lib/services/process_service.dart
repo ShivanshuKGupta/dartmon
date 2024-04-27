@@ -44,6 +44,8 @@ abstract class ProcessService {
   /// this function is used to restart the process
   Future<void> restart();
 
+  Future<void> init();
+
   /// this function is used to restart the process
   void onStdinEvent(data) {
     if (!isRunning || process == null) {

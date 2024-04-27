@@ -14,7 +14,7 @@ class FileOption extends UnknownOption {
     switch (extension) {
       case 'dart':
         config.cmd = 'dart';
-        config.args = ['run', value];
+        config.args = [value];
         break;
       case 'py':
         config.cmd = 'python';

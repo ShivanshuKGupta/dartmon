@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:dartmon/config/config.dart';
-import 'package:dartmon/services/logger.dart';
 import 'package:dartmon/services/process_service.dart';
 
 /// this is the service we use to manage the process
@@ -14,6 +13,16 @@ class OtherProcessService extends ProcessService {
   /// In case, of multiple restart requests within [config.timeout],
   /// we only restart once
   int executionIndex = 0;
+
+  @override
+  Future<void> init() async {
+    if (config.cmd == 'dart') {
+      /// run with enabled vm service
+      if (!config.args.contains('--enable-vm-service')) {
+        config.args.add('--enable-vm-service');
+      }
+    }
+  }
 
   @override
   Future<void> start() async {

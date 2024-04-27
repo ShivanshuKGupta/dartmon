@@ -18,42 +18,48 @@ class Watcher {
   Future<void> start() async {
     /// Determining which type of process to run
     process = OtherProcessService(config);
+    await process.init();
 
-    final filesToWatch = config.files;
-    final dirsToWatch = config.directories;
-    if (dirsToWatch.isEmpty) {
-      dirsToWatch.add(Directory('.'));
-    }
+    /// for dart processes, we let the vm service handle the hot reloading
+    if (process is! OtherProcessService) {
+      /// If the process is not a dart process, we manually watch all the files
+      final filesToWatch = config.files;
+      final dirsToWatch = config.directories;
+      if (dirsToWatch.isEmpty) {
+        dirsToWatch.add(Directory('.'));
+      }
 
-    /// We first find all files with the given extensions
-    /// and add them to the filesToWatch list
-    ///
-    /// Note: we only find files in the directories to watch
-    if (config.ext.isNotEmpty) {
-      print('Finding files with extensions: ${config.ext}');
-      for (var dir in dirsToWatch) {
-        final entities = dir.listSync(recursive: true);
-        for (var entity in entities) {
-          if (entity is File) {
-            if (config.ext.contains(entity.path.split('.').last)) {
-              filesToWatch.add(entity);
+      /// We first find all files with the given extensions
+      /// and add them to the filesToWatch list
+      ///
+      /// Note: we only find files in the directories to watch
+      if (config.ext.isNotEmpty) {
+        print('Finding files with extensions: ${config.ext}');
+        for (var dir in dirsToWatch) {
+          final entities = dir.listSync(recursive: true);
+          for (var entity in entities) {
+            if (entity is File) {
+              if (config.ext.contains(entity.path.split('.').last)) {
+                filesToWatch.add(entity);
+              }
             }
           }
         }
       }
-    }
 
-    /// Adding listeners to the files and directories changes
-    for (int i = 0; i < filesToWatch.length; i++) {
-      filesToWatch[i].watch(events: FileSystemEvent.all).listen(onFileModify);
+      /// Adding listeners to the files and directories changes
+      for (int i = 0; i < filesToWatch.length; i++) {
+        filesToWatch[i].watch(events: FileSystemEvent.all).listen(onFileModify);
+      }
+      for (int i = 0; i < dirsToWatch.length; i++) {
+        dirsToWatch[i]
+            .watch(events: FileSystemEvent.all, recursive: config.recursive)
+            .listen(onFileModify);
+      }
+      print('Starting: \'${config.exec}\'...');
+    } else {
+      print('Starting Dart Process: \'${config.exec}\'...');
     }
-    for (int i = 0; i < dirsToWatch.length; i++) {
-      dirsToWatch[i]
-          .watch(events: FileSystemEvent.all, recursive: config.recursive)
-          .listen(onFileModify);
-    }
-
-    print('Starting: \'${config.exec}\'...');
 
     /// After all the preparation, we start the process
     await process.start();
