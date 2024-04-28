@@ -1,4 +1,4 @@
-import 'package:dartmon/src/models/option.dart';
+import 'package:dartmon_cli/src/models/option.dart';
 
 /// Just a wrapper over the option class
 ///

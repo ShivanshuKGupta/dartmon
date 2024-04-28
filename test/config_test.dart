@@ -1,15 +1,15 @@
-import 'package:dartmon/src/config/config.dart';
-import 'package:dartmon/src/options/config_option.dart';
-import 'package:dartmon/src/options/dart_command_option.dart';
-import 'package:dartmon/src/options/exec_option.dart';
-import 'package:dartmon/src/options/ext_option.dart';
-import 'package:dartmon/src/options/file_option.dart';
-import 'package:dartmon/src/options/help_option.dart';
-import 'package:dartmon/src/options/ignore_option.dart';
-import 'package:dartmon/src/options/no_recursive_option.dart';
-import 'package:dartmon/src/options/timeout_option.dart';
-import 'package:dartmon/src/options/version_option.dart';
-import 'package:dartmon/src/options/watch_option.dart';
+import 'package:dartmon_cli/src/config/config.dart';
+import 'package:dartmon_cli/src/options/config_option.dart';
+import 'package:dartmon_cli/src/options/dart_command_option.dart';
+import 'package:dartmon_cli/src/options/exec_option.dart';
+import 'package:dartmon_cli/src/options/ext_option.dart';
+import 'package:dartmon_cli/src/options/file_option.dart';
+import 'package:dartmon_cli/src/options/help_option.dart';
+import 'package:dartmon_cli/src/options/ignore_option.dart';
+import 'package:dartmon_cli/src/options/no_recursive_option.dart';
+import 'package:dartmon_cli/src/options/timeout_option.dart';
+import 'package:dartmon_cli/src/options/version_option.dart';
+import 'package:dartmon_cli/src/options/watch_option.dart';
 import 'package:test/test.dart';
 
 DartmonConfig init() {

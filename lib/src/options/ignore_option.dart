@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dartmon/src/models/option.dart';
+import 'package:dartmon_cli/src/models/option.dart';
 
 class IgnoreOption extends Option {
   @override

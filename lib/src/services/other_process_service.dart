@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:dartmon/src/config/config.dart';
-import 'package:dartmon/src/services/process_service.dart';
+import 'package:dartmon_cli/src/config/config.dart';
+import 'package:dartmon_cli/src/services/process_service.dart';
 
 /// this is the service we use to manage the process
 /// Killing it, starting it, restarting it, etc.

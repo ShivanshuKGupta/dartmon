@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dartmon/src/models/unknown_option.dart';
+import 'package:dartmon_cli/src/models/unknown_option.dart';
 
 class DartCommandOption extends UnknownOption {
   @override

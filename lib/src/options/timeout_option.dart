@@ -1,5 +1,5 @@
-import 'package:dartmon/src/models/option.dart';
-import 'package:dartmon/src/extensions/duration_extension.dart';
+import 'package:dartmon_cli/src/models/option.dart';
+import 'package:dartmon_cli/src/extensions/duration_extension.dart';
 
 class TimeoutOption extends Option {
   @override

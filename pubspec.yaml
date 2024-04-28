@@ -1,4 +1,4 @@
-name: dartmon
+name: dartmon_cli
 description: A command line tool to perform hot reload on dart and other applications
 version: 1.0.0
 repository: https://github.com/ShivanshuKGupta/dartmon

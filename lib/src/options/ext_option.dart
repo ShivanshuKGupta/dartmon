@@ -1,4 +1,4 @@
-import 'package:dartmon/src/models/option.dart';
+import 'package:dartmon_cli/src/models/option.dart';
 
 class ExtOption extends Option {
   @override

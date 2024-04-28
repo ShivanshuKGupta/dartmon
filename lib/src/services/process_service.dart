@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:dartmon/src/config/config.dart';
-import 'package:dartmon/src/services/logger.dart';
+import 'package:dartmon_cli/src/config/config.dart';
+import 'package:dartmon_cli/src/services/logger.dart';
 
 /// This is the abstract class for the process service
 ///
