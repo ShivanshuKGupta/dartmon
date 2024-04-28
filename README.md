@@ -2,6 +2,16 @@
 
 A simple file watcher for Dart Projects. Can also be used to watch any other file types, or applications.
 
+# Installing
+
+```sh
+# Activate Dartmon cli
+dart pub global activate dartmon_cli
+
+# See list of available commands
+dartmon --help
+```
+
 # Help
 
 ```
