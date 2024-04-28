@@ -18,9 +18,9 @@ class OtherProcessService extends ProcessService {
   Future<void> init() async {
     if (config.cmd == 'dart') {
       /// run with enabled vm service
-      if (!config.args.contains('--enable-vm-service')) {
-        config.args.add('--enable-vm-service');
-      }
+      // if (!config.args.contains('--enable-vm-service')) {
+      //   config.args.add('--enable-vm-service');
+      // }
     }
   }
 

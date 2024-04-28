@@ -21,7 +21,7 @@ class Watcher {
     await process.init();
 
     /// for dart processes, we let the vm service handle the hot reloading
-    if (process is! OtherProcessService) {
+    if (process is OtherProcessService) {
       /// If the process is not a dart process, we manually watch all the files
       final filesToWatch = config.files;
       final dirsToWatch = config.directories;
