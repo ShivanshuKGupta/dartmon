@@ -1,4 +1,4 @@
-import 'package:dartmon/models/option.dart';
+import 'package:dartmon/src/models/option.dart';
 
 class NoRecursiveOption extends Option {
   @override

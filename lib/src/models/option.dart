@@ -1,4 +1,4 @@
-import 'package:dartmon/config/config.dart';
+import 'package:dartmon/src/config/config.dart';
 
 /// All global options and command are known as Options in Dartmon
 ///

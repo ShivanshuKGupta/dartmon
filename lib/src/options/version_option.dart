@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:dartmon/models/option.dart';
-import 'package:dartmon/version.dart';
+import 'package:dartmon/src/models/option.dart';
+import 'package:dartmon/src/version.dart';
 
 class VersionOption extends Option {
   @override

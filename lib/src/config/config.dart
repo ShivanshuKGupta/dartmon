@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:dartmon/options/help_option.dart';
-import 'package:dartmon/services/logger.dart';
-import 'package:dartmon/models/option.dart';
-import 'package:dartmon/extensions/duration_extension.dart';
-import 'package:dartmon/models/unknown_option.dart';
+import 'package:dartmon/src/options/help_option.dart';
+import 'package:dartmon/src/services/logger.dart';
+import 'package:dartmon/src/models/option.dart';
+import 'package:dartmon/src/extensions/duration_extension.dart';
+import 'package:dartmon/src/models/unknown_option.dart';
 
 part 'construct_config.g.dart';
 

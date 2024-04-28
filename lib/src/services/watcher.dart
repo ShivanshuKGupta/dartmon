@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:dartmon/config/config.dart';
-import 'package:dartmon/services/other_process_service.dart';
-import 'package:dartmon/services/process_service.dart';
+import 'package:dartmon/src/config/config.dart';
+import 'package:dartmon/src/services/other_process_service.dart';
+import 'package:dartmon/src/services/process_service.dart';
 
 /// The watcher class is responsible for watching the files and directories
 /// And restarting the process when a file is modified

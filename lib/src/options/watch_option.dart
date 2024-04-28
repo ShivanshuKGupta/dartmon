@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dartmon/models/option.dart';
+import 'package:dartmon/src/models/option.dart';
 
 class WatchOption extends Option {
   @override
