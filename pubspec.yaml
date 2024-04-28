@@ -1,10 +1,10 @@
 name: dartmon
-description: A sample command-line application.
+description: A command line tool to perform hot reload on dart and other applications
 version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+repository: https://github.com/ShivanshuKGupta/dartmon
 
 environment:
-  sdk: ^3.3.2
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   # path: ^1.8.0
