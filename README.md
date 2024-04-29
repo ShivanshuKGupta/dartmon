@@ -49,6 +49,10 @@ It runs .dart files with dart, .py files with python, and .js files with node.
 Run 'dartmon --help <command>' for more information about a command.
 ```
 
+## Upcoming Features
+
+1. For dart projects, dartmon will use Dart's VM capabilities for hot-reload.
+
 ## Limitations
 
 1. Watching for individual files changes is not available on Windows.
